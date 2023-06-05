@@ -4,6 +4,8 @@ package com.example.demo;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +19,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @RestController
@@ -47,6 +52,31 @@ public class DemoApplicationController {
         InputStream in = resource.getInputStream();
         IOUtils.copy(in, response.getOutputStream());
     }
+
+@RestController
+public class MonControleur {
+    
+    @GetMapping(value="/JSON", produces= MediaType.APPLICATION_JSON_VALUE)
+    public String getListeJson() {
+        List<Integer> liste = new ArrayList<>();
+        // la liste
+        liste.add(5);
+        liste.add(6);
+        
+        // Sérialiser la liste en JSON
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(liste);
+            return json;   
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Erreur lors de la sérialisation JSON";
+        }
+    }
+}
+
+
+    
 
 
 
